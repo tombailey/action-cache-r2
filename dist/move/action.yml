@@ -1,0 +1,31 @@
+name: "action-cache-r2-move"
+description: "Moves action-cache-r2 caches."
+author: "tombailey"
+branding:
+  icon: "archive"
+  color: "gray-dark"
+inputs:
+  bucket:
+    description: "The name of your R2 bucket."
+    required: true
+  endpoint:
+    description: "The endpoint for your R2 bucket without the bucket's name (e.g. https://<ACCOUNT_ID>.r2.cloudflarestorage.com)."
+    required: true
+  accessKeyId:
+    description: "An access key id with read/write access to your R2 bucket."
+    required: true
+  secretAccessKey:
+    description: "A secret access key with read/write access to your R2 bucket."
+    required: true
+  bucketPathPrefix:
+    description: "An optional path prefix for cache files saved to your R2 bucket (e.g. github/my-project/cache)."
+    default: ""
+  sourceKey:
+    description: "The key for the cache to move (e.g. linux-x86-feature/myBranch)."
+    required: true
+  targetKey:
+    description: "The key for cache to save, in order of precedence (e.g. linux-x86-main)."
+    required: true
+runs:
+  using: node20
+  main: ../../dist/move/main.js
