@@ -49582,9 +49582,8 @@ var import_promises = require("node:fs/promises");
 var import_node_stream = require("node:stream");
 var import_path = __toESM(require("path"));
 function createSafeKey(cacheKey, bucketPathPrefix) {
-  return encodeURI(
-    bucketPathPrefix ? import_path.default.join(bucketPathPrefix, cacheKey) : cacheKey
-  );
+  const encodedCacheKey = encodeURIComponent(cacheKey);
+  return bucketPathPrefix ? import_path.default.join(bucketPathPrefix, encodedCacheKey) : encodedCacheKey;
 }
 var FileNotFoundError = class extends Error {
 };
