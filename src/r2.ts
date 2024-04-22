@@ -15,9 +15,10 @@ export function createSafeKey(
   cacheKey: string,
   bucketPathPrefix?: string | null,
 ): string {
-  return encodeURI(
-    bucketPathPrefix ? path.join(bucketPathPrefix, cacheKey) : cacheKey,
-  );
+  const encodedCacheKey = encodeURIComponent(cacheKey);
+  return bucketPathPrefix
+    ? path.join(bucketPathPrefix, encodedCacheKey)
+    : encodedCacheKey;
 }
 
 export class FileNotFoundError extends Error {}
