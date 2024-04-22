@@ -28,7 +28,7 @@ jobs:
       # if possible these paths will be restored from a previous cache
       # in addition, a cache entry will be created for these paths after the job ends
       - name: Register cachable paths
-        uses: tombailey/action-cache-r2@v0.1
+        uses: tombailey/action-cache-r2@v0.2
         with:
           bucket: scratch
           endpoint: https://<ACCOUNT_ID>.r2.cloudflarestorage.com
@@ -37,7 +37,7 @@ jobs:
           paths: |
             ~/example
             example.txt
-          # for v0.1, the first key that exists will be restored so specify keys in order of preference
+          # for v0.2, the first key that exists will be restored so specify keys in order of preference
           restoreKeys: |
             my-workflow-${{ runner.os }}-${{ github.ref }}
             my-workflow-${{ runner.os }}-develop
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Register cachable paths
-        uses: tombailey/action-cache-r2/dist/move@v0.1
+        uses: tombailey/action-cache-r2/dist/move@v0.2
         with:
           bucket: scratch
           endpoint: https://<ACCOUNT_ID>.r2.cloudflarestorage.com
