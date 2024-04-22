@@ -39,11 +39,11 @@ jobs:
             example.txt
           # for v0.2, the first key that exists will be restored so specify keys in order of preference
           restoreKeys: |
-            my-workflow-${{ runner.os }}-${{ github.ref }}
+            my-workflow-${{ runner.os }}-${{ github.head_ref || github.ref_name }} 
             my-workflow-${{ runner.os }}-develop
             my-workflow-${{ runner.os }}-main
           # will be saved after the action completes
-          saveKey: my-workflow-${{ runner.os }}-${{ github.ref }}
+          saveKey: my-workflow-${{ runner.os }}-${{ github.head_ref || github.ref_name }}
 
       - name: Create cachable content
         run: mkdir ~/example && echo "cached-value" > example.txt
