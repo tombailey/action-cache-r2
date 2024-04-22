@@ -1,7 +1,6 @@
 import { SaveInputs } from "../job";
 import { createTarFile } from "../tar";
-import { createClient, uploadFile } from "../r2";
-import * as path from "path";
+import { createClient, createSafeKey, uploadFile } from "../r2";
 import untildify from "untildify";
 
 export async function save(
@@ -17,9 +16,7 @@ export async function save(
   await uploadFile(
     createClient(inputs.config),
     inputs.config,
-    inputs.config.bucketPathPrefix
-      ? path.join(inputs.config.bucketPathPrefix, inputs.saveKey)
-      : inputs.saveKey,
+    createSafeKey(inputs.saveKey, inputs.config.bucketPathPrefix),
     cacheArchiveFile,
   );
 }
