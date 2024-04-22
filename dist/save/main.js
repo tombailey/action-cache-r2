@@ -27004,13 +27004,13 @@ var require_dist_cjs36 = __commonJS({
         ...data.default && { default: data.default }
       }
     ), "getConfigData");
-    var import_path = require("path");
+    var import_path2 = require("path");
     var import_getHomeDir = require_getHomeDir();
     var ENV_CONFIG_PATH = "AWS_CONFIG_FILE";
-    var getConfigFilepath = /* @__PURE__ */ __name(() => process.env[ENV_CONFIG_PATH] || (0, import_path.join)((0, import_getHomeDir.getHomeDir)(), ".aws", "config"), "getConfigFilepath");
+    var getConfigFilepath = /* @__PURE__ */ __name(() => process.env[ENV_CONFIG_PATH] || (0, import_path2.join)((0, import_getHomeDir.getHomeDir)(), ".aws", "config"), "getConfigFilepath");
     var import_getHomeDir2 = require_getHomeDir();
     var ENV_CREDENTIALS_PATH = "AWS_SHARED_CREDENTIALS_FILE";
-    var getCredentialsFilepath = /* @__PURE__ */ __name(() => process.env[ENV_CREDENTIALS_PATH] || (0, import_path.join)((0, import_getHomeDir2.getHomeDir)(), ".aws", "credentials"), "getCredentialsFilepath");
+    var getCredentialsFilepath = /* @__PURE__ */ __name(() => process.env[ENV_CREDENTIALS_PATH] || (0, import_path2.join)((0, import_getHomeDir2.getHomeDir)(), ".aws", "credentials"), "getCredentialsFilepath");
     var prefixKeyRegex = /^([\w-]+)\s(["'])?([\w-@\+\.%:/]+)\2$/;
     var profileNameBlockList = ["__proto__", "profile __proto__"];
     var parseIni = /* @__PURE__ */ __name((iniData) => {
@@ -55340,7 +55340,7 @@ var require_path_reservations = __commonJS({
     var assert = require("assert");
     var normalize = require_normalize_unicode();
     var stripSlashes = require_strip_trailing_slashes();
-    var { join: join2 } = require("path");
+    var { join } = require("path");
     var platform = process.env.TESTING_TAR_FAKE_PLATFORM || process.platform;
     var isWindows = platform === "win32";
     module2.exports = () => {
@@ -55349,7 +55349,7 @@ var require_path_reservations = __commonJS({
       const getDirs = (path2) => {
         const dirs = path2.split("/").slice(0, -1).reduce((set, path3) => {
           if (set.length) {
-            path3 = join2(set[set.length - 1], path3);
+            path3 = join(set[set.length - 1], path3);
           }
           set.push(path3 || "/");
           return set;
@@ -55417,7 +55417,7 @@ var require_path_reservations = __commonJS({
       };
       const reserve = (paths, fn) => {
         paths = isWindows ? ["win32 parallelization disabled"] : paths.map((p) => {
-          return stripSlashes(join2(normalize(p))).toLowerCase();
+          return stripSlashes(join(normalize(p))).toLowerCase();
         });
         const dirs = new Set(
           paths.map((path2) => getDirs(path2)).reduce((a, b) => a.concat(b))
@@ -56288,6 +56288,11 @@ var core = __toESM(require_core());
 // src/r2.ts
 var import_client_s3 = __toESM(require_dist_cjs71());
 var import_node_fs = require("node:fs");
+var import_path = __toESM(require("path"));
+function createSafeKey(cacheKey, bucketPathPrefix) {
+  const encodedCacheKey = encodeURIComponent(cacheKey);
+  return bucketPathPrefix ? import_path.default.join(bucketPathPrefix, encodedCacheKey) : encodedCacheKey;
+}
 function createConfig(endpoint, accessKeyId, secretAccessKey, bucket, bucketPathPrefix = null) {
   return {
     endpoint,
@@ -56366,7 +56371,6 @@ function createTarFile(inputFilePaths, filePath, gzip = true) {
 }
 
 // src/save/index.ts
-var path = __toESM(require("path"));
 var import_untildify = __toESM(require_untildify());
 async function save(inputs, cacheArchiveFile = "action-cache-r2.tar.gz") {
   await createTarFile(
@@ -56378,7 +56382,7 @@ async function save(inputs, cacheArchiveFile = "action-cache-r2.tar.gz") {
   await uploadFile(
     createClient(inputs.config),
     inputs.config,
-    inputs.config.bucketPathPrefix ? path.join(inputs.config.bucketPathPrefix, inputs.saveKey) : inputs.saveKey,
+    createSafeKey(inputs.saveKey, inputs.config.bucketPathPrefix),
     cacheArchiveFile
   );
 }
