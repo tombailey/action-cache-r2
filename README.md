@@ -6,11 +6,11 @@ Cache workflow items for future re-use using CloudFlare's R2 service.
 
 The following workflow will try to restore cache entries from:
 
-- `my-workflow-${{ runner.os }}-${{ github.ref }}` or
+- `my-workflow-${{ runner.os }}-${{ github.head_ref || github.ref_name }}` or
 - `my-workflow-${{ runner.os }}-develop` or
 - `my-workflow-${{ runner.os }}-main`
 
-After the job finishes, it will save a cache entry for `my-workflow-${{ runner.os }}-${{ github.ref }}`. Overriding any existing cache entry with the same key.
+After the job finishes, it will save a cache entry for `my-workflow-${{ runner.os }}-${{ github.head_ref || github.ref_name }}`. Overriding any existing cache entry with the same key.
 
 ```yaml
 name: MyWorkflowWithCaching
