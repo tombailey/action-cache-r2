@@ -23,7 +23,7 @@ jobs:
             example.txt
           # for v0.2, the first key that exists will be restored so specify keys in order of preference
           restoreKeys: |
-            demo-${{ runner.os }}-${{ github.head_ref || github.ref_name }} 
+            demo-${{ runner.os }}-${{ github.head_ref || github.ref_name }}
             demo-${{ runner.os }}-develop
             demo-${{ runner.os }}-main
           # will be saved after the action completes
