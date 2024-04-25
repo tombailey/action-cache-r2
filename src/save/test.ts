@@ -15,6 +15,7 @@ const inputs: SaveInputs = {
     "~/test_dir",
     "/app/test_file.txt",
     "/app/test_dir",
+    "/app/missing",
   ],
 };
 save(inputs).then(() => console.log("Done saving"));

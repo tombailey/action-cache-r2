@@ -519,7 +519,7 @@ var require_file_command = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.prepareKeyValueMessage = exports2.issueFileCommand = void 0;
-    var fs = __importStar4(require("fs"));
+    var fs2 = __importStar4(require("fs"));
     var os = __importStar4(require("os"));
     var uuid_1 = (init_esm_node(), __toCommonJS(esm_node_exports));
     var utils_1 = require_utils();
@@ -528,10 +528,10 @@ var require_file_command = __commonJS({
       if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
       }
-      if (!fs.existsSync(filePath)) {
+      if (!fs2.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+      fs2.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
         encoding: "utf8"
       });
     }
@@ -51784,7 +51784,7 @@ var require_write_entry = __commonJS({
     var { Minipass } = require_minipass();
     var Pax = require_pax();
     var Header = require_header();
-    var fs = require("fs");
+    var fs2 = require("fs");
     var path2 = require("path");
     var normPath = require_normalize_windows_path();
     var stripSlash = require_strip_trailing_slashes();
@@ -51887,7 +51887,7 @@ var require_write_entry = __commonJS({
         return super.emit(ev, ...data);
       }
       [LSTAT]() {
-        fs.lstat(this.absolute, (er, stat) => {
+        fs2.lstat(this.absolute, (er, stat) => {
           if (er) {
             return this.emit("error", er);
           }
@@ -51969,7 +51969,7 @@ var require_write_entry = __commonJS({
         this.end();
       }
       [SYMLINK]() {
-        fs.readlink(this.absolute, (er, linkpath) => {
+        fs2.readlink(this.absolute, (er, linkpath) => {
           if (er) {
             return this.emit("error", er);
           }
@@ -52006,7 +52006,7 @@ var require_write_entry = __commonJS({
         this[OPENFILE]();
       }
       [OPENFILE]() {
-        fs.open(this.absolute, "r", (er, fd) => {
+        fs2.open(this.absolute, "r", (er, fd) => {
           if (er) {
             return this.emit("error", er);
           }
@@ -52030,7 +52030,7 @@ var require_write_entry = __commonJS({
       }
       [READ]() {
         const { fd, buf, offset, length, pos } = this;
-        fs.read(fd, buf, offset, length, pos, (er, bytesRead) => {
+        fs2.read(fd, buf, offset, length, pos, (er, bytesRead) => {
           if (er) {
             return this[CLOSE](() => this.emit("error", er));
           }
@@ -52038,7 +52038,7 @@ var require_write_entry = __commonJS({
         });
       }
       [CLOSE](cb) {
-        fs.close(this.fd, cb);
+        fs2.close(this.fd, cb);
       }
       [ONREAD](bytesRead) {
         if (bytesRead <= 0 && this.remain > 0) {
@@ -52102,19 +52102,19 @@ var require_write_entry = __commonJS({
     });
     var WriteEntrySync = class extends WriteEntry {
       [LSTAT]() {
-        this[ONLSTAT](fs.lstatSync(this.absolute));
+        this[ONLSTAT](fs2.lstatSync(this.absolute));
       }
       [SYMLINK]() {
-        this[ONREADLINK](fs.readlinkSync(this.absolute));
+        this[ONREADLINK](fs2.readlinkSync(this.absolute));
       }
       [OPENFILE]() {
-        this[ONOPENFILE](fs.openSync(this.absolute, "r"));
+        this[ONOPENFILE](fs2.openSync(this.absolute, "r"));
       }
       [READ]() {
         let threw = true;
         try {
           const { fd, buf, offset, length, pos } = this;
-          const bytesRead = fs.readSync(fd, buf, offset, length, pos);
+          const bytesRead = fs2.readSync(fd, buf, offset, length, pos);
           this[ONREAD](bytesRead);
           threw = false;
         } finally {
@@ -52131,7 +52131,7 @@ var require_write_entry = __commonJS({
         cb();
       }
       [CLOSE](cb) {
-        fs.closeSync(this.fd);
+        fs2.closeSync(this.fd);
         cb();
       }
     };
@@ -52669,7 +52669,7 @@ var require_pack = __commonJS({
     var WRITEENTRYCLASS = Symbol("writeEntryClass");
     var WRITE = Symbol("write");
     var ONDRAIN = Symbol("ondrain");
-    var fs = require("fs");
+    var fs2 = require("fs");
     var path2 = require("path");
     var warner = require_warn_mixin();
     var normPath = require_normalize_windows_path();
@@ -52779,7 +52779,7 @@ var require_pack = __commonJS({
         job.pending = true;
         this[JOBS] += 1;
         const stat = this.follow ? "stat" : "lstat";
-        fs[stat](job.absolute, (er, stat2) => {
+        fs2[stat](job.absolute, (er, stat2) => {
           job.pending = false;
           this[JOBS] -= 1;
           if (er) {
@@ -52800,7 +52800,7 @@ var require_pack = __commonJS({
       [READDIR](job) {
         job.pending = true;
         this[JOBS] += 1;
-        fs.readdir(job.absolute, (er, entries) => {
+        fs2.readdir(job.absolute, (er, entries) => {
           job.pending = false;
           this[JOBS] -= 1;
           if (er) {
@@ -52962,10 +52962,10 @@ var require_pack = __commonJS({
       }
       [STAT](job) {
         const stat = this.follow ? "statSync" : "lstatSync";
-        this[ONSTAT](job, fs[stat](job.absolute));
+        this[ONSTAT](job, fs2[stat](job.absolute));
       }
       [READDIR](job, stat) {
-        this[ONREADDIR](job, fs.readdirSync(job.absolute));
+        this[ONREADDIR](job, fs2.readdirSync(job.absolute));
       }
       // gotta get it all in this tick
       [PIPE](job) {
@@ -53524,8 +53524,8 @@ var require_fs_minipass = __commonJS({
     "use strict";
     var MiniPass = require_minipass3();
     var EE = require("events").EventEmitter;
-    var fs = require("fs");
-    var writev = fs.writev;
+    var fs2 = require("fs");
+    var writev = fs2.writev;
     if (!writev) {
       const binding = process.binding("fs");
       const FSReqWrap = binding.FSReqWrap || binding.FSReqCallback;
@@ -53598,7 +53598,7 @@ var require_fs_minipass = __commonJS({
         throw new TypeError("this is a readable stream");
       }
       [_open]() {
-        fs.open(this[_path], "r", (er, fd) => this[_onopen](er, fd));
+        fs2.open(this[_path], "r", (er, fd) => this[_onopen](er, fd));
       }
       [_onopen](er, fd) {
         if (er)
@@ -53618,7 +53618,7 @@ var require_fs_minipass = __commonJS({
           const buf = this[_makeBuf]();
           if (buf.length === 0)
             return process.nextTick(() => this[_onread](null, 0, buf));
-          fs.read(this[_fd], buf, 0, buf.length, null, (er, br, buf2) => this[_onread](er, br, buf2));
+          fs2.read(this[_fd], buf, 0, buf.length, null, (er, br, buf2) => this[_onread](er, br, buf2));
         }
       }
       [_onread](er, br, buf) {
@@ -53632,7 +53632,7 @@ var require_fs_minipass = __commonJS({
         if (this[_autoClose] && typeof this[_fd] === "number") {
           const fd = this[_fd];
           this[_fd] = null;
-          fs.close(fd, (er) => er ? this.emit("error", er) : this.emit("close"));
+          fs2.close(fd, (er) => er ? this.emit("error", er) : this.emit("close"));
         }
       }
       [_onerror](er) {
@@ -53675,7 +53675,7 @@ var require_fs_minipass = __commonJS({
       [_open]() {
         let threw = true;
         try {
-          this[_onopen](null, fs.openSync(this[_path], "r"));
+          this[_onopen](null, fs2.openSync(this[_path], "r"));
           threw = false;
         } finally {
           if (threw)
@@ -53689,7 +53689,7 @@ var require_fs_minipass = __commonJS({
             this[_reading] = true;
             do {
               const buf = this[_makeBuf]();
-              const br = buf.length === 0 ? 0 : fs.readSync(this[_fd], buf, 0, buf.length, null);
+              const br = buf.length === 0 ? 0 : fs2.readSync(this[_fd], buf, 0, buf.length, null);
               if (!this[_handleChunk](br, buf))
                 break;
             } while (true);
@@ -53705,7 +53705,7 @@ var require_fs_minipass = __commonJS({
         if (this[_autoClose] && typeof this[_fd] === "number") {
           const fd = this[_fd];
           this[_fd] = null;
-          fs.closeSync(fd);
+          fs2.closeSync(fd);
           this.emit("close");
         }
       }
@@ -53752,7 +53752,7 @@ var require_fs_minipass = __commonJS({
         this.emit("error", er);
       }
       [_open]() {
-        fs.open(
+        fs2.open(
           this[_path],
           this[_flags],
           this[_mode],
@@ -53796,7 +53796,7 @@ var require_fs_minipass = __commonJS({
         return true;
       }
       [_write](buf) {
-        fs.write(this[_fd], buf, 0, buf.length, this[_pos], (er, bw) => this[_onwrite](er, bw));
+        fs2.write(this[_fd], buf, 0, buf.length, this[_pos], (er, bw) => this[_onwrite](er, bw));
       }
       [_onwrite](er, bw) {
         if (er)
@@ -53840,7 +53840,7 @@ var require_fs_minipass = __commonJS({
         if (this[_autoClose] && typeof this[_fd] === "number") {
           const fd = this[_fd];
           this[_fd] = null;
-          fs.close(fd, (er) => er ? this.emit("error", er) : this.emit("close"));
+          fs2.close(fd, (er) => er ? this.emit("error", er) : this.emit("close"));
         }
       }
     };
@@ -53849,7 +53849,7 @@ var require_fs_minipass = __commonJS({
         let fd;
         if (this[_defaultFlag] && this[_flags] === "r+") {
           try {
-            fd = fs.openSync(this[_path], this[_flags], this[_mode]);
+            fd = fs2.openSync(this[_path], this[_flags], this[_mode]);
           } catch (er) {
             if (er.code === "ENOENT") {
               this[_flags] = "w";
@@ -53858,14 +53858,14 @@ var require_fs_minipass = __commonJS({
               throw er;
           }
         } else
-          fd = fs.openSync(this[_path], this[_flags], this[_mode]);
+          fd = fs2.openSync(this[_path], this[_flags], this[_mode]);
         this[_onopen](null, fd);
       }
       [_close]() {
         if (this[_autoClose] && typeof this[_fd] === "number") {
           const fd = this[_fd];
           this[_fd] = null;
-          fs.closeSync(fd);
+          fs2.closeSync(fd);
           this.emit("close");
         }
       }
@@ -53874,7 +53874,7 @@ var require_fs_minipass = __commonJS({
         try {
           this[_onwrite](
             null,
-            fs.writeSync(this[_fd], buf, 0, buf.length, this[_pos])
+            fs2.writeSync(this[_fd], buf, 0, buf.length, this[_pos])
           );
           threw = false;
         } finally {
@@ -54323,7 +54323,7 @@ var require_list = __commonJS({
     "use strict";
     var hlo = require_high_level_opt();
     var Parser = require_parse2();
-    var fs = require("fs");
+    var fs2 = require("fs");
     var fsm = require_fs_minipass();
     var path2 = require("path");
     var stripSlash = require_strip_trailing_slashes();
@@ -54380,16 +54380,16 @@ var require_list = __commonJS({
       let threw = true;
       let fd;
       try {
-        const stat = fs.statSync(file);
+        const stat = fs2.statSync(file);
         const readSize = opt.maxReadSize || 16 * 1024 * 1024;
         if (stat.size < readSize) {
-          p.end(fs.readFileSync(file));
+          p.end(fs2.readFileSync(file));
         } else {
           let pos = 0;
           const buf = Buffer.allocUnsafe(readSize);
-          fd = fs.openSync(file, "r");
+          fd = fs2.openSync(file, "r");
           while (pos < stat.size) {
-            const bytesRead = fs.readSync(fd, buf, 0, readSize, pos);
+            const bytesRead = fs2.readSync(fd, buf, 0, readSize, pos);
             pos += bytesRead;
             p.write(buf.slice(0, bytesRead));
           }
@@ -54399,7 +54399,7 @@ var require_list = __commonJS({
       } finally {
         if (threw && fd) {
           try {
-            fs.closeSync(fd);
+            fs2.closeSync(fd);
           } catch (er) {
           }
         }
@@ -54412,7 +54412,7 @@ var require_list = __commonJS({
       const p = new Promise((resolve, reject) => {
         parse2.on("error", reject);
         parse2.on("end", resolve);
-        fs.stat(file, (er, stat) => {
+        fs2.stat(file, (er, stat) => {
           if (er) {
             reject(er);
           } else {
@@ -54531,7 +54531,7 @@ var require_replace = __commonJS({
     "use strict";
     var hlo = require_high_level_opt();
     var Pack = require_pack();
-    var fs = require("fs");
+    var fs2 = require("fs");
     var fsm = require_fs_minipass();
     var t = require_list();
     var path2 = require("path");
@@ -54557,20 +54557,20 @@ var require_replace = __commonJS({
       let position;
       try {
         try {
-          fd = fs.openSync(opt.file, "r+");
+          fd = fs2.openSync(opt.file, "r+");
         } catch (er) {
           if (er.code === "ENOENT") {
-            fd = fs.openSync(opt.file, "w+");
+            fd = fs2.openSync(opt.file, "w+");
           } else {
             throw er;
           }
         }
-        const st = fs.fstatSync(fd);
+        const st = fs2.fstatSync(fd);
         const headBuf = Buffer.alloc(512);
         POSITION:
           for (position = 0; position < st.size; position += 512) {
             for (let bufPos = 0, bytes = 0; bufPos < 512; bufPos += bytes) {
-              bytes = fs.readSync(
+              bytes = fs2.readSync(
                 fd,
                 headBuf,
                 bufPos,
@@ -54602,7 +54602,7 @@ var require_replace = __commonJS({
       } finally {
         if (threw) {
           try {
-            fs.closeSync(fd);
+            fs2.closeSync(fd);
           } catch (er) {
           }
         }
@@ -54622,7 +54622,7 @@ var require_replace = __commonJS({
       const getPos = (fd, size, cb_) => {
         const cb2 = (er, pos) => {
           if (er) {
-            fs.close(fd, (_) => cb_(er));
+            fs2.close(fd, (_) => cb_(er));
           } else {
             cb_(null, pos);
           }
@@ -54639,7 +54639,7 @@ var require_replace = __commonJS({
           }
           bufPos += bytes;
           if (bufPos < 512 && bytes) {
-            return fs.read(
+            return fs2.read(
               fd,
               headBuf,
               bufPos,
@@ -54670,9 +54670,9 @@ var require_replace = __commonJS({
             opt.mtimeCache.set(h.path, h.mtime);
           }
           bufPos = 0;
-          fs.read(fd, headBuf, 0, 512, position, onread);
+          fs2.read(fd, headBuf, 0, 512, position, onread);
         };
-        fs.read(fd, headBuf, 0, 512, position, onread);
+        fs2.read(fd, headBuf, 0, 512, position, onread);
       };
       const promise = new Promise((resolve, reject) => {
         p.on("error", reject);
@@ -54680,14 +54680,14 @@ var require_replace = __commonJS({
         const onopen = (er, fd) => {
           if (er && er.code === "ENOENT" && flag === "r+") {
             flag = "w+";
-            return fs.open(opt.file, flag, onopen);
+            return fs2.open(opt.file, flag, onopen);
           }
           if (er) {
             return reject(er);
           }
-          fs.fstat(fd, (er2, st) => {
+          fs2.fstat(fd, (er2, st) => {
             if (er2) {
-              return fs.close(fd, () => reject(er2));
+              return fs2.close(fd, () => reject(er2));
             }
             getPos(fd, st.size, (er3, position) => {
               if (er3) {
@@ -54704,7 +54704,7 @@ var require_replace = __commonJS({
             });
           });
         };
-        fs.open(opt.file, flag, onopen);
+        fs2.open(opt.file, flag, onopen);
       });
       return cb ? promise.then(cb, cb) : promise;
     };
@@ -54776,24 +54776,24 @@ var require_update = __commonJS({
 var require_opts_arg = __commonJS({
   "node_modules/mkdirp/lib/opts-arg.js"(exports2, module2) {
     var { promisify } = require("util");
-    var fs = require("fs");
+    var fs2 = require("fs");
     var optsArg = (opts) => {
       if (!opts)
-        opts = { mode: 511, fs };
+        opts = { mode: 511, fs: fs2 };
       else if (typeof opts === "object")
-        opts = { mode: 511, fs, ...opts };
+        opts = { mode: 511, fs: fs2, ...opts };
       else if (typeof opts === "number")
-        opts = { mode: opts, fs };
+        opts = { mode: opts, fs: fs2 };
       else if (typeof opts === "string")
-        opts = { mode: parseInt(opts, 8), fs };
+        opts = { mode: parseInt(opts, 8), fs: fs2 };
       else
         throw new TypeError("invalid options argument");
-      opts.mkdir = opts.mkdir || opts.fs.mkdir || fs.mkdir;
+      opts.mkdir = opts.mkdir || opts.fs.mkdir || fs2.mkdir;
       opts.mkdirAsync = promisify(opts.mkdir);
-      opts.stat = opts.stat || opts.fs.stat || fs.stat;
+      opts.stat = opts.stat || opts.fs.stat || fs2.stat;
       opts.statAsync = promisify(opts.stat);
-      opts.statSync = opts.statSync || opts.fs.statSync || fs.statSync;
-      opts.mkdirSync = opts.mkdirSync || opts.fs.mkdirSync || fs.mkdirSync;
+      opts.statSync = opts.statSync || opts.fs.statSync || fs2.statSync;
+      opts.mkdirSync = opts.mkdirSync || opts.fs.mkdirSync || fs2.mkdirSync;
       return opts;
     };
     module2.exports = optsArg;
@@ -54960,12 +54960,12 @@ var require_mkdirp_native = __commonJS({
 // node_modules/mkdirp/lib/use-native.js
 var require_use_native = __commonJS({
   "node_modules/mkdirp/lib/use-native.js"(exports2, module2) {
-    var fs = require("fs");
+    var fs2 = require("fs");
     var version2 = process.env.__TESTING_MKDIRP_NODE_VERSION__ || process.version;
     var versArr = version2.replace(/^v/, "").split(".");
     var hasNative = +versArr[0] > 10 || +versArr[0] === 10 && +versArr[1] >= 12;
-    var useNative = !hasNative ? () => false : (opts) => opts.mkdir === fs.mkdir;
-    var useNativeSync = !hasNative ? () => false : (opts) => opts.mkdirSync === fs.mkdirSync;
+    var useNative = !hasNative ? () => false : (opts) => opts.mkdir === fs2.mkdir;
+    var useNativeSync = !hasNative ? () => false : (opts) => opts.mkdirSync === fs2.mkdirSync;
     module2.exports = { useNative, useNativeSync };
   }
 });
@@ -55001,14 +55001,14 @@ var require_mkdirp = __commonJS({
 var require_chownr = __commonJS({
   "node_modules/chownr/chownr.js"(exports2, module2) {
     "use strict";
-    var fs = require("fs");
+    var fs2 = require("fs");
     var path2 = require("path");
-    var LCHOWN = fs.lchown ? "lchown" : "chown";
-    var LCHOWNSYNC = fs.lchownSync ? "lchownSync" : "chownSync";
-    var needEISDIRHandled = fs.lchown && !process.version.match(/v1[1-9]+\./) && !process.version.match(/v10\.[6-9]/);
+    var LCHOWN = fs2.lchown ? "lchown" : "chown";
+    var LCHOWNSYNC = fs2.lchownSync ? "lchownSync" : "chownSync";
+    var needEISDIRHandled = fs2.lchown && !process.version.match(/v1[1-9]+\./) && !process.version.match(/v10\.[6-9]/);
     var lchownSync = (path3, uid, gid) => {
       try {
-        return fs[LCHOWNSYNC](path3, uid, gid);
+        return fs2[LCHOWNSYNC](path3, uid, gid);
       } catch (er) {
         if (er.code !== "ENOENT")
           throw er;
@@ -55016,7 +55016,7 @@ var require_chownr = __commonJS({
     };
     var chownSync = (path3, uid, gid) => {
       try {
-        return fs.chownSync(path3, uid, gid);
+        return fs2.chownSync(path3, uid, gid);
       } catch (er) {
         if (er.code !== "ENOENT")
           throw er;
@@ -55026,7 +55026,7 @@ var require_chownr = __commonJS({
       if (!er || er.code !== "EISDIR")
         cb(er);
       else
-        fs.chown(path3, uid, gid, cb);
+        fs2.chown(path3, uid, gid, cb);
     } : (_, __, ___, cb) => cb;
     var handleEISDirSync = needEISDIRHandled ? (path3, uid, gid) => {
       try {
@@ -55038,18 +55038,18 @@ var require_chownr = __commonJS({
       }
     } : (path3, uid, gid) => lchownSync(path3, uid, gid);
     var nodeVersion = process.version;
-    var readdir = (path3, options, cb) => fs.readdir(path3, options, cb);
-    var readdirSync = (path3, options) => fs.readdirSync(path3, options);
+    var readdir = (path3, options, cb) => fs2.readdir(path3, options, cb);
+    var readdirSync = (path3, options) => fs2.readdirSync(path3, options);
     if (/^v4\./.test(nodeVersion))
-      readdir = (path3, options, cb) => fs.readdir(path3, cb);
+      readdir = (path3, options, cb) => fs2.readdir(path3, cb);
     var chown = (cpath, uid, gid, cb) => {
-      fs[LCHOWN](cpath, uid, gid, handleEISDIR(cpath, uid, gid, (er) => {
+      fs2[LCHOWN](cpath, uid, gid, handleEISDIR(cpath, uid, gid, (er) => {
         cb(er && er.code !== "ENOENT" ? er : null);
       }));
     };
     var chownrKid = (p, child, uid, gid, cb) => {
       if (typeof child === "string")
-        return fs.lstat(path2.resolve(p, child), (er, stats) => {
+        return fs2.lstat(path2.resolve(p, child), (er, stats) => {
           if (er)
             return cb(er.code !== "ENOENT" ? er : null);
           stats.name = child;
@@ -55093,7 +55093,7 @@ var require_chownr = __commonJS({
     var chownrKidSync = (p, child, uid, gid) => {
       if (typeof child === "string") {
         try {
-          const stats = fs.lstatSync(path2.resolve(p, child));
+          const stats = fs2.lstatSync(path2.resolve(p, child));
           stats.name = child;
           child = stats;
         } catch (er) {
@@ -55133,7 +55133,7 @@ var require_mkdir = __commonJS({
   "node_modules/tar/lib/mkdir.js"(exports2, module2) {
     "use strict";
     var mkdirp = require_mkdirp();
-    var fs = require("fs");
+    var fs2 = require("fs");
     var path2 = require("path");
     var chownr = require_chownr();
     var normPath = require_normalize_windows_path();
@@ -55160,7 +55160,7 @@ var require_mkdir = __commonJS({
     var cGet = (cache, key) => cache.get(normPath(key));
     var cSet = (cache, key, val2) => cache.set(normPath(key), val2);
     var checkCwd = (dir, cb) => {
-      fs.stat(dir, (er, st) => {
+      fs2.stat(dir, (er, st) => {
         if (er || !st.isDirectory()) {
           er = new CwdError(dir, er && er.code || "ENOTDIR");
         }
@@ -55187,7 +55187,7 @@ var require_mkdir = __commonJS({
           if (created && doChown) {
             chownr(created, uid, gid, (er2) => done(er2));
           } else if (needChmod) {
-            fs.chmod(dir, mode, cb);
+            fs2.chmod(dir, mode, cb);
           } else {
             cb();
           }
@@ -55215,22 +55215,22 @@ var require_mkdir = __commonJS({
       if (cGet(cache, part)) {
         return mkdir_(part, parts, mode, cache, unlink, cwd, created, cb);
       }
-      fs.mkdir(part, mode, onmkdir(part, parts, mode, cache, unlink, cwd, created, cb));
+      fs2.mkdir(part, mode, onmkdir(part, parts, mode, cache, unlink, cwd, created, cb));
     };
     var onmkdir = (part, parts, mode, cache, unlink, cwd, created, cb) => (er) => {
       if (er) {
-        fs.lstat(part, (statEr, st) => {
+        fs2.lstat(part, (statEr, st) => {
           if (statEr) {
             statEr.path = statEr.path && normPath(statEr.path);
             cb(statEr);
           } else if (st.isDirectory()) {
             mkdir_(part, parts, mode, cache, unlink, cwd, created, cb);
           } else if (unlink) {
-            fs.unlink(part, (er2) => {
+            fs2.unlink(part, (er2) => {
               if (er2) {
                 return cb(er2);
               }
-              fs.mkdir(part, mode, onmkdir(part, parts, mode, cache, unlink, cwd, created, cb));
+              fs2.mkdir(part, mode, onmkdir(part, parts, mode, cache, unlink, cwd, created, cb));
             });
           } else if (st.isSymbolicLink()) {
             return cb(new SymlinkError(part, part + "/" + parts.join("/")));
@@ -55247,7 +55247,7 @@ var require_mkdir = __commonJS({
       let ok = false;
       let code = "ENOTDIR";
       try {
-        ok = fs.statSync(dir).isDirectory();
+        ok = fs2.statSync(dir).isDirectory();
       } catch (er) {
         code = er.code;
       } finally {
@@ -55274,7 +55274,7 @@ var require_mkdir = __commonJS({
           chownr.sync(created2, uid, gid);
         }
         if (needChmod) {
-          fs.chmodSync(dir, mode);
+          fs2.chmodSync(dir, mode);
         }
       };
       if (cache && cGet(cache, dir) === true) {
@@ -55296,17 +55296,17 @@ var require_mkdir = __commonJS({
           continue;
         }
         try {
-          fs.mkdirSync(part, mode);
+          fs2.mkdirSync(part, mode);
           created = created || part;
           cSet(cache, part, true);
         } catch (er) {
-          const st = fs.lstatSync(part);
+          const st = fs2.lstatSync(part);
           if (st.isDirectory()) {
             cSet(cache, part, true);
             continue;
           } else if (unlink) {
-            fs.unlinkSync(part);
-            fs.mkdirSync(part, mode);
+            fs2.unlinkSync(part);
+            fs2.mkdirSync(part, mode);
             created = created || part;
             cSet(cache, part, true);
             continue;
@@ -55453,8 +55453,8 @@ var require_get_write_flag = __commonJS({
   "node_modules/tar/lib/get-write-flag.js"(exports2, module2) {
     var platform = process.env.__FAKE_PLATFORM__ || process.platform;
     var isWindows = platform === "win32";
-    var fs = global.__FAKE_TESTING_FS__ || require("fs");
-    var { O_CREAT, O_TRUNC, O_WRONLY, UV_FS_O_FILEMAP = 0 } = fs.constants;
+    var fs2 = global.__FAKE_TESTING_FS__ || require("fs");
+    var { O_CREAT, O_TRUNC, O_WRONLY, UV_FS_O_FILEMAP = 0 } = fs2.constants;
     var fMapEnabled = isWindows && !!UV_FS_O_FILEMAP;
     var fMapLimit = 512 * 1024;
     var fMapFlag = UV_FS_O_FILEMAP | O_TRUNC | O_CREAT | O_WRONLY;
@@ -55468,7 +55468,7 @@ var require_unpack = __commonJS({
     "use strict";
     var assert = require("assert");
     var Parser = require_parse2();
-    var fs = require("fs");
+    var fs2 = require("fs");
     var fsm = require_fs_minipass();
     var path2 = require("path");
     var mkdir = require_mkdir();
@@ -55510,23 +55510,23 @@ var require_unpack = __commonJS({
     var DEFAULT_MAX_DEPTH = 1024;
     var unlinkFile = (path3, cb) => {
       if (!isWindows) {
-        return fs.unlink(path3, cb);
+        return fs2.unlink(path3, cb);
       }
       const name = path3 + ".DELETE." + crypto4.randomBytes(16).toString("hex");
-      fs.rename(path3, name, (er) => {
+      fs2.rename(path3, name, (er) => {
         if (er) {
           return cb(er);
         }
-        fs.unlink(name, cb);
+        fs2.unlink(name, cb);
       });
     };
     var unlinkFileSync = (path3) => {
       if (!isWindows) {
-        return fs.unlinkSync(path3);
+        return fs2.unlinkSync(path3);
       }
       const name = path3 + ".DELETE." + crypto4.randomBytes(16).toString("hex");
-      fs.renameSync(path3, name);
-      fs.unlinkSync(name);
+      fs2.renameSync(path3, name);
+      fs2.unlinkSync(name);
     };
     var uint32 = (a, b, c) => a === a >>> 0 ? a : b === b >>> 0 ? b : c;
     var cacheKeyNormalize = (path3) => stripSlash(normPath(normalize(path3))).toLowerCase();
@@ -55753,7 +55753,7 @@ var require_unpack = __commonJS({
         });
         stream.on("error", (er) => {
           if (stream.fd) {
-            fs.close(stream.fd, () => {
+            fs2.close(stream.fd, () => {
             });
           }
           stream.write = () => true;
@@ -55764,7 +55764,7 @@ var require_unpack = __commonJS({
         const done = (er) => {
           if (er) {
             if (stream.fd) {
-              fs.close(stream.fd, () => {
+              fs2.close(stream.fd, () => {
               });
             }
             this[ONERROR](er, entry);
@@ -55772,7 +55772,7 @@ var require_unpack = __commonJS({
             return;
           }
           if (--actions === 0) {
-            fs.close(stream.fd, (er2) => {
+            fs2.close(stream.fd, (er2) => {
               if (er2) {
                 this[ONERROR](er2, entry);
               } else {
@@ -55789,13 +55789,13 @@ var require_unpack = __commonJS({
             actions++;
             const atime = entry.atime || /* @__PURE__ */ new Date();
             const mtime = entry.mtime;
-            fs.futimes(fd, atime, mtime, (er) => er ? fs.utimes(abs, atime, mtime, (er2) => done(er2 && er)) : done());
+            fs2.futimes(fd, atime, mtime, (er) => er ? fs2.utimes(abs, atime, mtime, (er2) => done(er2 && er)) : done());
           }
           if (this[DOCHOWN](entry)) {
             actions++;
             const uid = this[UID](entry);
             const gid = this[GID](entry);
-            fs.fchown(fd, uid, gid, (er) => er ? fs.chown(abs, uid, gid, (er2) => done(er2 && er)) : done());
+            fs2.fchown(fd, uid, gid, (er) => er ? fs2.chown(abs, uid, gid, (er2) => done(er2 && er)) : done());
           }
           done();
         });
@@ -55827,11 +55827,11 @@ var require_unpack = __commonJS({
           };
           if (entry.mtime && !this.noMtime) {
             actions++;
-            fs.utimes(entry.absolute, entry.atime || /* @__PURE__ */ new Date(), entry.mtime, done);
+            fs2.utimes(entry.absolute, entry.atime || /* @__PURE__ */ new Date(), entry.mtime, done);
           }
           if (this[DOCHOWN](entry)) {
             actions++;
-            fs.chown(entry.absolute, this[UID](entry), this[GID](entry), done);
+            fs2.chown(entry.absolute, this[UID](entry), this[GID](entry), done);
           }
           done();
         });
@@ -55919,7 +55919,7 @@ var require_unpack = __commonJS({
           afterMakeParent();
         };
         const afterMakeParent = () => {
-          fs.lstat(entry.absolute, (lstatEr, st) => {
+          fs2.lstat(entry.absolute, (lstatEr, st) => {
             if (st && (this.keep || this.newer && st.mtime > entry.mtime)) {
               this[SKIP](entry);
               done();
@@ -55935,10 +55935,10 @@ var require_unpack = __commonJS({
                 if (!needChmod) {
                   return afterChmod();
                 }
-                return fs.chmod(entry.absolute, entry.mode, afterChmod);
+                return fs2.chmod(entry.absolute, entry.mode, afterChmod);
               }
               if (entry.absolute !== this.cwd) {
-                return fs.rmdir(entry.absolute, (er) => this[MAKEFS](er, entry, done));
+                return fs2.rmdir(entry.absolute, (er) => this[MAKEFS](er, entry, done));
               }
             }
             if (entry.absolute === this.cwd) {
@@ -55974,7 +55974,7 @@ var require_unpack = __commonJS({
         }
       }
       [LINK](entry, linkpath, link, done) {
-        fs[link](linkpath, entry.absolute, (er) => {
+        fs2[link](linkpath, entry.absolute, (er) => {
           if (er) {
             this[ONERROR](er, entry);
           } else {
@@ -56015,7 +56015,7 @@ var require_unpack = __commonJS({
             }
           }
         }
-        const [lstatEr, st] = callSync(() => fs.lstatSync(entry.absolute));
+        const [lstatEr, st] = callSync(() => fs2.lstatSync(entry.absolute));
         if (st && (this.keep || this.newer && st.mtime > entry.mtime)) {
           return this[SKIP](entry);
         }
@@ -56026,11 +56026,11 @@ var require_unpack = __commonJS({
           if (entry.type === "Directory") {
             const needChmod = !this.noChmod && entry.mode && (st.mode & 4095) !== entry.mode;
             const [er3] = needChmod ? callSync(() => {
-              fs.chmodSync(entry.absolute, entry.mode);
+              fs2.chmodSync(entry.absolute, entry.mode);
             }) : [];
             return this[MAKEFS](er3, entry);
           }
-          const [er2] = callSync(() => fs.rmdirSync(entry.absolute));
+          const [er2] = callSync(() => fs2.rmdirSync(entry.absolute));
           this[MAKEFS](er2, entry);
         }
         const [er] = entry.absolute === this.cwd ? [] : callSync(() => unlinkFileSync(entry.absolute));
@@ -56041,7 +56041,7 @@ var require_unpack = __commonJS({
         const oner = (er) => {
           let closeError;
           try {
-            fs.closeSync(fd);
+            fs2.closeSync(fd);
           } catch (e) {
             closeError = e;
           }
@@ -56052,7 +56052,7 @@ var require_unpack = __commonJS({
         };
         let fd;
         try {
-          fd = fs.openSync(entry.absolute, getFlag(entry.size), mode);
+          fd = fs2.openSync(entry.absolute, getFlag(entry.size), mode);
         } catch (er) {
           return oner(er);
         }
@@ -56063,7 +56063,7 @@ var require_unpack = __commonJS({
         }
         tx.on("data", (chunk) => {
           try {
-            fs.writeSync(fd, chunk, 0, chunk.length);
+            fs2.writeSync(fd, chunk, 0, chunk.length);
           } catch (er) {
             oner(er);
           }
@@ -56074,10 +56074,10 @@ var require_unpack = __commonJS({
             const atime = entry.atime || /* @__PURE__ */ new Date();
             const mtime = entry.mtime;
             try {
-              fs.futimesSync(fd, atime, mtime);
+              fs2.futimesSync(fd, atime, mtime);
             } catch (futimeser) {
               try {
-                fs.utimesSync(entry.absolute, atime, mtime);
+                fs2.utimesSync(entry.absolute, atime, mtime);
               } catch (utimeser) {
                 er = futimeser;
               }
@@ -56087,10 +56087,10 @@ var require_unpack = __commonJS({
             const uid = this[UID](entry);
             const gid = this[GID](entry);
             try {
-              fs.fchownSync(fd, uid, gid);
+              fs2.fchownSync(fd, uid, gid);
             } catch (fchowner) {
               try {
-                fs.chownSync(entry.absolute, uid, gid);
+                fs2.chownSync(entry.absolute, uid, gid);
               } catch (chowner) {
                 er = er || fchowner;
               }
@@ -56109,13 +56109,13 @@ var require_unpack = __commonJS({
         }
         if (entry.mtime && !this.noMtime) {
           try {
-            fs.utimesSync(entry.absolute, entry.atime || /* @__PURE__ */ new Date(), entry.mtime);
+            fs2.utimesSync(entry.absolute, entry.atime || /* @__PURE__ */ new Date(), entry.mtime);
           } catch (er2) {
           }
         }
         if (this[DOCHOWN](entry)) {
           try {
-            fs.chownSync(entry.absolute, this[UID](entry), this[GID](entry));
+            fs2.chownSync(entry.absolute, this[UID](entry), this[GID](entry));
           } catch (er2) {
           }
         }
@@ -56142,7 +56142,7 @@ var require_unpack = __commonJS({
       }
       [LINK](entry, linkpath, link, done) {
         try {
-          fs[link + "Sync"](linkpath, entry.absolute);
+          fs2[link + "Sync"](linkpath, entry.absolute);
           done();
           entry.resume();
         } catch (er) {
@@ -56161,7 +56161,7 @@ var require_extract = __commonJS({
     "use strict";
     var hlo = require_high_level_opt();
     var Unpack = require_unpack();
-    var fs = require("fs");
+    var fs2 = require("fs");
     var fsm = require_fs_minipass();
     var path2 = require("path");
     var stripSlash = require_strip_trailing_slashes();
@@ -56205,7 +56205,7 @@ var require_extract = __commonJS({
     var extractFileSync = (opt) => {
       const u = new Unpack.Sync(opt);
       const file = opt.file;
-      const stat = fs.statSync(file);
+      const stat = fs2.statSync(file);
       const readSize = opt.maxReadSize || 16 * 1024 * 1024;
       const stream = new fsm.ReadStreamSync(file, {
         readSize,
@@ -56220,7 +56220,7 @@ var require_extract = __commonJS({
       const p = new Promise((resolve, reject) => {
         u.on("error", reject);
         u.on("close", resolve);
-        fs.stat(file, (er, stat) => {
+        fs2.stat(file, (er, stat) => {
           if (er) {
             reject(er);
           } else {
@@ -56372,10 +56372,13 @@ function createTarFile(inputFilePaths, filePath, gzip = true) {
 
 // src/save/index.ts
 var import_untildify = __toESM(require_untildify());
+var fs = __toESM(require("node:fs"));
 async function save(inputs, cacheArchiveFile = "action-cache-r2.tar.gz") {
   await createTarFile(
     inputs.paths.map((filePath) => {
       return filePath.startsWith("~") ? (0, import_untildify.default)(filePath) : filePath;
+    }).filter((filePath) => {
+      return fs.existsSync(filePath);
     }),
     cacheArchiveFile
   );
