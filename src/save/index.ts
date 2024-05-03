@@ -17,6 +17,7 @@ export async function save(
         return fs.existsSync(filePath);
       }),
     cacheArchiveFile,
+    inputs.gzip,
   );
   await uploadFile(
     createClient(inputs.config),
